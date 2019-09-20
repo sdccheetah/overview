@@ -3,13 +3,13 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const readline = require('readline');
 const productsSchema = require('./Schema.js');
+var Schema = mongoose.Schema;
 
-mongoose.connect('mongodb://localhost/27017', {
+mongoose.connect('mongodb://localhost/products', {
   useNewUrlParser: true
 });
-const db = mongoose.connection;
 
-// const products = new mongoose.Schema(productsSchema);
+const db = mongoose.connection;
 
 let products_list = new Schema({
   id: { type: String, unique: true },
@@ -20,7 +20,7 @@ let products_list = new Schema({
   default_price: Number
 });
 
-let product = mongoose.model('Product', productSchema);
+let product = mongoose.model('products_lists', products_list);
 db.on('error', console.error.bind(console, 'Error connecting to MongoDB:'));
 db.once('open', function() {
   console.log('Connected to MongoDB with Mongoose...');
@@ -28,31 +28,27 @@ db.once('open', function() {
   let count = 0;
   let insert = 0;
   var lineReader = fs
-    .createReadStream('../products_list.csv')
+    .createReadStream('./product_list.csv')
     .pipe(csv())
     .on('data', data => {
-      console.log(data);
-      //   results.push({
-      //     id: data.id,
-      //     product_id: data[" product_id"],
-      //     body: data[" body"],
-      //     date_written: data[" date_written"],
-      //     asker_name: data[" asker_name"],
-      //     asker_email: data[" asker_email"],
-      //     reported: data[" reported"],
-      //     helpful: data[" helpful"]
-      //   });
-      //   count++;
-      //   if (count === 1000) {
-      //     Question.insertMany(results);
-      //     count = 0;
-      //     results = [];
-      //     insert++;
-      //     console.log(insert);
-      //   }
-      // })
-      // .on("end", () => {
-      //   console.log("questions inserted");
-      // });
+      results.push({
+        id: data.id,
+        name: data[' name'],
+        slogan: data[' slogan'],
+        description: data[' description'],
+        asker_email: data[' asker_email'],
+        category: data[' category'],
+        default_price: data[' default_price']
+      });
+      count++;
+      if (count === 10000) {
+        product.insertMany(results);
+        count = 0;
+        results = [];
+        insert++;
+      }
+    })
+    .on('end', () => {
+      console.log('products inserted');
     });
 });
