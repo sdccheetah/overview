@@ -24,6 +24,7 @@ let product = mongoose.model('products_lists', products_list);
 db.on('error', console.error.bind(console, 'Error connecting to MongoDB:'));
 db.once('open', function() {
   console.log('Connected to MongoDB with Mongoose...');
+  console.time('database');
   let results = [];
   let count = 0;
   let insert = 0;
@@ -41,14 +42,19 @@ db.once('open', function() {
         default_price: data[' default_price']
       });
       count++;
-      if (count === 10000) {
+      if (count === 100000) {
         product.insertMany(results);
         count = 0;
         results = [];
         insert++;
+        console.log('count', insert);
       }
     })
     .on('end', () => {
+      product.insertMany(results);
       console.log('products inserted');
+      console.timeEnd('database');
     });
 });
+
+//65k (full csv) inserted at 462.366ms (.46 seconds)

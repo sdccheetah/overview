@@ -11,40 +11,47 @@ mongoose.connect('mongodb://localhost/products', {
 
 const db = mongoose.connection;
 
-let products_list = new Schema({
+let skus_model = new Schema({
   id: { type: Number, unique: true },
   styleId: Number,
   size: String,
   quantity: Number
 });
 
-let skus = mongoose.model('skus', skus);
+let skus = mongoose.model('skus', skus_model);
 db.on('error', console.error.bind(console, 'Error connecting to MongoDB:'));
 db.once('open', function() {
   console.log('Connected to MongoDB with Mongoose...');
+  console.time('database');
   let results = [];
   let count = 0;
   let insert = 0;
   var lineReader = fs
-    .createReadStream('./product_list.csv')
+    .createReadStream('./skus.csv')
     .pipe(csv())
     .on('data', data => {
       results.push({
         id: data.id,
-        styleId: data.styleID,
-        size: data.size,
-        quantity: data.quantity
+        styleId: data[' styleId'],
+        size: data[' size'],
+        quantity: data[' quantity']
       });
       count++;
-      if (count === 10000) {
-        product.insertMany(results);
+      if (count === 100000) {
+        skus.insertMany(results);
         count = 0;
         results = [];
         insert++;
+        console.timeLog('database');
+        console.log('insert amount', insert);
       }
     })
     .on('end', () => {
-      product.insertMany(results);
-      console.log('products inserted');
+      skus.insertMany(results);
+      console.timeEnd('database');
+      console.log('skus inserted');
     });
 });
+
+//1mil entries in 92,500ms (92 seconds)
+//around ~38 minutes for 26mil entries
