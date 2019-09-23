@@ -9,10 +9,10 @@ mongoose.connect('mongodb://localhost/products', {
   useNewUrlParser: true
 });
 
-const db = mongoose.connection;
+const db = mongoose.connection; // ensure index?
 
 let photos_model = new Schema({
-  id: String,
+  id: { type: String, index: true },
   styleId: String,
   url: String,
   thumbnail_url: String
@@ -30,7 +30,6 @@ db.once('open', function() {
     .createReadStream('./photos.csv')
     .pipe(csv())
     .on('data', data => {
-      console.log(data);
       results.push({
         id: data.id,
         styleId: data[' styleId'],
@@ -49,8 +48,10 @@ db.once('open', function() {
     })
     .on('end', () => {
       photos.insertMany(results);
+      db.photos.createIndex({ id: 1 });
       console.timeEnd('database');
       console.log('photos inserted');
     });
 });
+
 //730000 in 65905.644ms (65 seconds)

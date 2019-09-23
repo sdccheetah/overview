@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost/products', {
 const db = mongoose.connection;
 
 let product_list = new Schema({
-  id: { type: String, unique: true },
+  id: { type: String, unique: true, index: true },
   name: String,
   slogan: String,
   description: String,
@@ -32,7 +32,6 @@ db.once('open', function() {
     .createReadStream('./data_files/product_list.csv')
     .pipe(csv())
     .on('data', data => {
-      console.log(data);
       results.push({
         id: data.id,
         name: data[' name'],
@@ -43,7 +42,7 @@ db.once('open', function() {
         default_price: data[' default_price']
       });
       count++;
-      if (count === 100000) {
+      if (count === 10000) {
         product.insertMany(results);
         count = 0;
         results = [];
