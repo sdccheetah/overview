@@ -16,11 +16,12 @@ let features = new Schema({
 });
 
 let styles = new Schema({
-  style_id: Number,
+  style_id: { type: String, unique: true },
+  productId: Number,
   name: String,
-  original_price: String,
   sale_price: String,
-  default: { type: Number, default: 0 }
+  original_price: String,
+  default_style: { type: Number, default: 0 }
 });
 
 let photos = new Schema({

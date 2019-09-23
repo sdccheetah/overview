@@ -11,7 +11,7 @@ mongoose.connect('mongodb://localhost/products', {
 
 const db = mongoose.connection;
 
-let products_list = new Schema({
+let product_list = new Schema({
   id: { type: String, unique: true },
   name: String,
   slogan: String,
@@ -20,7 +20,7 @@ let products_list = new Schema({
   default_price: Number
 });
 
-let product = mongoose.model('products_lists', products_list);
+let product = mongoose.model('product_lists', product_list);
 db.on('error', console.error.bind(console, 'Error connecting to MongoDB:'));
 db.once('open', function() {
   console.log('Connected to MongoDB with Mongoose...');
@@ -29,9 +29,10 @@ db.once('open', function() {
   let count = 0;
   let insert = 0;
   var lineReader = fs
-    .createReadStream('./product_list.csv')
+    .createReadStream('./data_files/product_list.csv')
     .pipe(csv())
     .on('data', data => {
+      console.log(data);
       results.push({
         id: data.id,
         name: data[' name'],
