@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 const csv = require('csv-parser');
-const readline = require('readline');
 // const productsSchema = require('./Schema.js');
 var Schema = mongoose.Schema;
 
@@ -19,6 +18,7 @@ let related_model = new Schema({
 });
 
 let related = mongoose.model('related', related_model);
+
 db.on('error', console.error.bind(console, 'Error connecting to MongoDB:'));
 db.once('open', function() {
   console.log('Connected to MongoDB with Mongoose...');
@@ -27,7 +27,7 @@ db.once('open', function() {
   let count = 0;
   let insert = 0;
   var lineReader = fs
-    .createReadStream('./related.csv')
+    .createReadStream('./data-files/related.csv')
     .pipe(csv())
     .on('data', data => {
       results.push({
@@ -37,7 +37,7 @@ db.once('open', function() {
         quantity: data[' quantity']
       });
       count++;
-      if (count === 100000) {
+      if (count === 10000) {
         skus.insertMany(results);
         count = 0;
         results = [];
@@ -49,7 +49,7 @@ db.once('open', function() {
     .on('end', () => {
       skus.insertMany(results);
       console.timeEnd('database');
-      console.log('skus inserted');
+      console.log('skus inserted!');
     });
 });
 

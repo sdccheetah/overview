@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 const csv = require('csv-parser');
-const readline = require('readline');
 // const productsSchema = require('./Schema.js');
 var Schema = mongoose.Schema;
 

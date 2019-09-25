@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 const csv = require('csv-parser');
-const readline = require('readline');
 // const productsSchema = require('./Schema.js');
 var Schema = mongoose.Schema;
 
@@ -27,7 +26,7 @@ db.once('open', function() {
   let count = 0;
   let insert = 0;
   var lineReader = fs
-    .createReadStream('./photos.csv')
+    .createReadStream('./data_files/photos.csv')
     .pipe(csv())
     .on('data', data => {
       results.push({

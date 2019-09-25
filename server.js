@@ -1,26 +1,25 @@
 const express = require('express');
+const MongoClient = require('mongodb').MongoClient;
+const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
-const db = require('database'); // get the database
 
 app.use(express.static('./client/dist'));
-app.get('/', (req, res) => res.send('Hello World!'));
+app.use(bodyParser.json());
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+// app.get('/', (req, res) => res.send('Hello World!'));
+MongoClient.connect(
+  'mongodb://localhost:27017/products',
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  function(err, client) {
+    if (err) throw err;
+    const db = client.db('products');
+    console.log('connected to database');
 
-app.get('/products', (req, res) => {
-  //     let results = {}
-  //     db.find(productId = req.params) // join tables together
-  //     .then(data => {
-  //         results: {
-  //             productId = data.productId,
-  //             name = data.name,
-  //         }
-  //     })
-  //     .then(()=> {
-  //         res.send(results)
-  //     })
-  //     .catch((err) => {
-  //         console.log(err)
-  //     })
-});
+    app.get('/', (req, res) => {
+      res.send('inside of the get request');
+    });
+  }
+);
+
+app.listen(port, () => console.log(`App listening on port ${port}!`));
