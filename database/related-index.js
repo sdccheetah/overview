@@ -27,7 +27,7 @@ db.once('open', function() {
   let count = 0;
   let insert = 0;
   var lineReader = fs
-    .createReadStream('./data-files/related.csv')
+    .createReadStream('./data_files/related.csv')
     .pipe(csv())
     .on('data', data => {
       results.push({
