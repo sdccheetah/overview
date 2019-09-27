@@ -30,6 +30,7 @@ db.once('open', function() {
     .createReadStream('./data_files/skus.csv')
     .pipe(csv())
     .on('data', data => {
+      console.log(data);
       results.push({
         id: data.id,
         styleId: data[' styleId'],

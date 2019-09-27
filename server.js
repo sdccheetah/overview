@@ -21,17 +21,6 @@ MongoClient.connect(
       // let page = req.params.page || 3;
       let results = {};
       db.collection('product_lists')
-        // .find()
-        // .toArray()
-        // .then(data => {
-        //   res.send(data);
-        // });
-        // .aggregate({
-        //   $project: {
-        //     product_id: '$id',
-        //     name: '$name'
-        //   }
-        // })
         .find()
         .project({
           _id: 0,
@@ -91,7 +80,6 @@ MongoClient.connect(
       let results = {
         product_id: req.params.product_id
       };
-      // get the product detail and add features
       db.collection('styles')
         .find({ productId: style })
         .project({
@@ -105,12 +93,38 @@ MongoClient.connect(
         .toArray()
         .then(data => {
           results['results'] = data;
-          // let inner = () => {
-          //   return db.collections('photos')
-          //   .find({})
-          // }
-          res.send(results);
-        }); //TODO: chain together from photos & skus collection
+          let promises = results['results'].map(style => {
+            return db
+              .collection('photos')
+              .find({ styleId: style['style_id'] })
+              .project({
+                _id: 0,
+                thumbnail_url: 1,
+                url: 1
+              })
+              .toArray()
+              .then(image => {
+                style['photos'] = image;
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          });
+          let skus = [];
+          let secondPromises = results['results'].map(sku1 => {
+            return db
+              .collection('skus')
+              .find({ styleId: style['style_id'] })
+              .toArray()
+              .then(sku => {
+                skus.push(sku);
+              });
+          });
+          results['skus'] = skus;
+          Promise.all(promises).then(data => {
+            res.send(results);
+          });
+        });
     });
     //sample data:
     // "product_id": "3",
@@ -124,7 +138,6 @@ MongoClient.connect(
     app.get('/products/:product_id/related', (req, res) => {
       let related = req.params.product_id;
       let results = [];
-      // get the product detail and add features
       db.collection('related_products')
         .find({ current_product_id: related })
         .project({
@@ -142,6 +155,13 @@ MongoClient.connect(
           res.send(results.sort());
         });
     });
+    //example data: [
+    //     1,
+    //     3,
+    //     6,
+    //     8,
+    //     9
+    // ]
   }
 );
 
