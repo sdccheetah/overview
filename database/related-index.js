@@ -46,11 +46,10 @@ db.once('open', function() {
     })
     .on('end', () => {
       related.insertMany(results);
-      db.related_products.createIndex({ id: 1 });
+      db.related.createIndex({ id: 1 });
       console.timeEnd('database');
       console.log('related products inserted!');
     });
 });
 
 //1mil entries in 92,500ms (92 seconds)
-//around ~38 minutes for 26mil entries
