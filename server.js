@@ -49,14 +49,12 @@ MongoClient.connect(
         });
     });
     //example data:
-    // "_id": "5d8909d8541d51125ed16581",
     // "id": "1",
     // "name": "Camo Onesie",
     // "slogan": "Blend in to your crowd",
     // "description": "The So Fatigues will wake you up and fit you in. This high energy camo will have you blending in to even the wildest surroundings.",
     // "category": "Jackets",
-    // "default_price": 140,
-    // "__v": 0
+    // "default_price": 140
 
     app.get('/products/:product_id', (req, res) => {
       // get the product detail and add features

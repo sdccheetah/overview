@@ -11,13 +11,11 @@ mongoose.connect('mongodb://localhost/products', {
 const db = mongoose.connection;
 
 let related_model = new Schema({
-  id: { type: Number, index: true },
-  styleId: Number,
-  size: String,
-  quantity: Number
+  current_product_id: { type: String, index: true },
+  related_product_id: String
 });
 
-let related = mongoose.model('related', related_model);
+let related = mongoose.model('related_products', related_model);
 
 db.on('error', console.error.bind(console, 'Error connecting to MongoDB:'));
 db.once('open', function() {
@@ -30,15 +28,15 @@ db.once('open', function() {
     .createReadStream('./data_files/related.csv')
     .pipe(csv())
     .on('data', data => {
+      // console.log('data from database', data);
       results.push({
         id: data.id,
-        styleId: data[' styleId'],
-        size: data[' size'],
-        quantity: data[' quantity']
+        current_product_id: data['current_product_id'],
+        related_product_id: data['related_product_id']
       });
       count++;
-      if (count === 10000) {
-        skus.insertMany(results);
+      if (count === 1000) {
+        related.insertMany(results);
         count = 0;
         results = [];
         insert++;
@@ -47,9 +45,10 @@ db.once('open', function() {
       }
     })
     .on('end', () => {
-      skus.insertMany(results);
+      related.insertMany(results);
+      db.related_products.createIndex({ id: 1 });
       console.timeEnd('database');
-      console.log('skus inserted!');
+      console.log('related products inserted!');
     });
 });
 
