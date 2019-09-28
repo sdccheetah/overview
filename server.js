@@ -78,7 +78,8 @@ MongoClient.connect(
     app.get('/products/:product_id/styles', (req, res) => {
       let style = Number(req.params.product_id);
       let results = {
-        product_id: req.params.product_id
+        product_id: req.params.product_id,
+        skus: []
       };
       db.collection('styles')
         .find({ productId: style })
@@ -105,22 +106,22 @@ MongoClient.connect(
               .toArray()
               .then(image => {
                 style['photos'] = image;
+                results['skus'] = [];
+                let secondPromises = results['results'].map(sku1 => {
+                  return db
+                    .collection('skus')
+                    .find({ styleId: Number(style['style_id']) })
+                    .project({ _id: 0, size: 1, quantity: 1 })
+                    .toArray()
+                    .then(sku1 => {
+                      results['skus'].push(sku1);
+                    });
+                });
               })
               .catch(err => {
                 console.log(err);
               });
           });
-          let skus = [];
-          let secondPromises = results['results'].map(sku1 => {
-            return db
-              .collection('skus')
-              .find({ styleId: style['style_id'] })
-              .toArray()
-              .then(sku => {
-                skus.push(sku);
-              });
-          });
-          results['skus'] = skus;
           Promise.all(promises).then(data => {
             res.send(results);
           });
