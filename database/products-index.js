@@ -29,7 +29,9 @@ db.once('open', function() {
   let count = 0;
   let insert = 0;
   var lineReader = fs
-    .createReadStream('./data_files/product_list.csv')
+    .createReadStream(
+      'https://sdcfilescheetah.s3.us-east-2.amazonaws.com/product_list.csv'
+    )
     .pipe(csv())
     .on('data', data => {
       results.push({
@@ -58,3 +60,13 @@ db.once('open', function() {
 });
 
 //65k (full csv) inserted at 462.366ms (.46 seconds)
+
+//export from mongoexport
+// mongoexport \
+// --host localhost \
+// --port 27017 \
+// --db products \
+// --collection product_lists \
+// --type csv \
+// --fields id,name,slogan,description,asker_email,category,default_price \
+// --out Desktop/products_list

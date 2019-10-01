@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 const csv = require('csv-parser');
+const data1 = require('./data_files/styles.csv');
 // const productsSchema = require('./Schema.js');
 var Schema = mongoose.Schema;
 
@@ -11,7 +12,7 @@ mongoose.connect('mongodb://localhost/products', {
 const db = mongoose.connection;
 
 let styles_model = new Schema({
-  style_id: { type: String, unique: true },
+  style_id: { type: Number, unique: true },
   productId: Number,
   name: String,
   sale_price: String,
@@ -28,7 +29,7 @@ db.once('open', function() {
   let count = 0;
   let insert = 0;
   var lineReader = fs
-    .createReadStream('./styles.csv')
+    .createReadStream(data1)
     .pipe(csv())
     .on('data', data => {
       results.push({
