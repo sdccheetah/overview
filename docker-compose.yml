@@ -15,7 +15,7 @@
 #     image: mongo
 #     volumes:
 #       - type: bind
-#       source: /usr/local/var/mongodb
+#       source: ./data:/data/db
 #       target: /data/db
 #     ports:
 #       - "27017:27017"
