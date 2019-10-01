@@ -1,7 +1,9 @@
-FROM node:12.6
+FROM node:latest
 RUN mkdir /app
 ADD . /app
 WORKDIR /app
 RUN npm install
+RUN npm install mongo mongodb
 EXPOSE 8000
-CMD ["node", "server.js"]
+EXPOSE 27017
+RUN node server.js
