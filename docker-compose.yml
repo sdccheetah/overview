@@ -8,7 +8,8 @@ services:
       - '8000:8000'
     links:
       - mongo
-
+    environment:
+      MONGO: 'mongodb://mongo:27017/products'
   mongo:
     container_name: mongo
     image: mongo
