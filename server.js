@@ -3,6 +3,7 @@ const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
 const app = express();
 const port = 8000;
+const db
 
 app.use(express.static('./client/dist'));
 app.use(bodyParser.json());
@@ -15,21 +16,12 @@ const connectToMongo = () => {
       tries++;
       if (tries < 25) setTimeout(connectToMongo, 5000);
     }
-
     useNewUrlParser: true;
     console.log('CONNECTED TO MONGO');
-  })
-    .then(data => {
-      console.log('CONNECTED TO MONGO');
-    })
-    .catch(err => {
-      console.log('NOT CONNECTED... TRYING AGAIN IN 5 SEC');
-      tries++;
-      if (tries < 25) setTimeout(connectToMongo, 5000);
-    });
-};
+  });
+}
 connectToMongo();
-const db = db.db('products');
+db = db.db('products');
 //     console.log('connected to database');
 app.get('/products/list', (req, res) => {
   // get list of all products
