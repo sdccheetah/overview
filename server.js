@@ -2,13 +2,13 @@ const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
 const app = express();
-const port = 3000;
+const port = 8000;
 
 app.use(express.static('./client/dist'));
 app.use(bodyParser.json());
 
 MongoClient.connect(
-  'mongodb://localhost:27017/products',
+  'mongodb://host.docker.internal:27017/products',
   { useNewUrlParser: true, useUnifiedTopology: true },
   function(err, client) {
     if (err) throw err;
@@ -165,5 +165,7 @@ MongoClient.connect(
     // ]
   }
 );
-
-app.listen(port, () => console.log(`App listening on port ${port}!`));
+app.listen(port, () => {
+  console.log('this is working, this is the port', port);
+  console.log(`WHY ARE YOU NOT WORKING ${port}!`);
+});
