@@ -8,7 +8,7 @@ app.use(express.static('./client/dist'));
 app.use(bodyParser.json());
 
 MongoClient.connect(
-  'mongodb://host.docker.internal:27017/products',
+  'mongodb://mongo:27017/products',
   { useNewUrlParser: true, useUnifiedTopology: true },
   function(err, client) {
     if (err) throw err;
