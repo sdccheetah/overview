@@ -1,12 +1,5 @@
 version: '3'
 services:
-  mongo:
-    container_name: mongo
-    image: mongo
-  volumes:
-    - ../../data:/data/db
-  ports:
-    - '27017:27017'
   app:
     container_name: app
     restart: always
@@ -15,3 +8,11 @@ services:
       - '8000:8000'
     links:
       - mongo
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ../../data:/data/db
+    ports:
+      - '27017:27017'
