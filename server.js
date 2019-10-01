@@ -3,7 +3,8 @@ const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
 const app = express();
 const port = 8000;
-const MONGO = env.app.use(express.static('./client/dist'));
+
+app.use(express.static('./client/dist'));
 app.use(bodyParser.json());
 
 const connectToMongo = () => {
