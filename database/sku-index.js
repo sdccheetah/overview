@@ -27,10 +27,9 @@ db.once('open', function() {
   let count = 0;
   let insert = 0;
   var lineReader = fs
-    .createReadStream('./data_files/skus.csv')
+    .createReadStream('./skus.csv')
     .pipe(csv())
     .on('data', data => {
-      console.log(data);
       results.push({
         id: data.id,
         styleId: data[' styleId'],
@@ -49,6 +48,7 @@ db.once('open', function() {
     })
     .on('end', () => {
       skus.insertMany(results);
+      db.skus.createIndex({ id: 1 });
       console.timeEnd('database');
       console.log('skus inserted');
     });
