@@ -3,7 +3,7 @@ const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
 const app = express();
 const port = 8000;
-const db
+const db = '';
 
 app.use(express.static('./client/dist'));
 app.use(bodyParser.json());
@@ -19,7 +19,7 @@ const connectToMongo = () => {
     useNewUrlParser: true;
     console.log('CONNECTED TO MONGO');
   });
-}
+};
 connectToMongo();
 db = db.db('products');
 //     console.log('connected to database');
