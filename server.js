@@ -178,30 +178,30 @@ app.get('/products/:product_id/related', (req, res) => {
 //   { useNewUrlParser: true, useUnifiedTopology: true },
 //   function(err, client) {
 //     if (err) throw err;
-const db = client.db('products');
-//     console.log('connected to database');
-app.get('/products/list', (req, res) => {
-  // get list of all products
-  // let count = req.params.limit || 3;
-  // let page = req.params.page || 3;
-  let results = {};
-  db.collection('product_lists')
-    .find()
-    .project({
-      _id: 0,
-      id: 1,
-      name: 1,
-      slogan: 1,
-      description: 1,
-      category: 1,
-      default_price: 1
-    })
-    .toArray()
-    .then(data => {
-      results['results'] = data;
-      res.send(results['results']);
-    });
-});
+// const db = client.db('products');
+// //     console.log('connected to database');
+// app.get('/products/list', (req, res) => {
+//   // get list of all products
+//   // let count = req.params.limit || 3;
+//   // let page = req.params.page || 3;
+//   let results = {};
+//   db.collection('product_lists')
+//     .find()
+//     .project({
+//       _id: 0,
+//       id: 1,
+//       name: 1,
+//       slogan: 1,
+//       description: 1,
+//       category: 1,
+//       default_price: 1
+//     })
+//     .toArray()
+//     .then(data => {
+//       results['results'] = data;
+//       res.send(results['results']);
+//     });
+// });
 // //example data:
 // // "id": "1",
 // // "name": "Camo Onesie",
