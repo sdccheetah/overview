@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 const connectToMongo = () => {
   let tries = 0;
-  mongoose.connect(`mongodb://mongo.in:27017/products`, function(err, db) {
+  mongoose.connect(`mongodb://mongo:27017/products`, function(err, db) {
     if (err) {
       console.log('NOT CONNECTED... TRYING AGAIN IN 5 SEC');
       tries++;
