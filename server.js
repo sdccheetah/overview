@@ -10,17 +10,22 @@ app.use(bodyParser.json());
 
 const connectToMongo = () => {
   let tries = 0;
-  mongoose.connect(`mongodb://mongo:27017/products`, function(err, db) {
-    if (err) {
-      console.log('NOT CONNECTED... TRYING AGAIN IN 5 SEC');
+  mongoose
+    .connect(`mongodb://mongo:27017/products`, {
+      useNewUrlParser: true
+    })
+    .then(data => {
+      console.log("CONNECTED TO MONGO");
+    })
+    .catch(err => {
+      console.log("NOT CONNECTED... TRYING AGAIN IN 5 SEC");
       tries++;
       if (tries < 25) setTimeout(connectToMongo, 5000);
-    }
-    useNewUrlParser: true;
-    console.log('CONNECTED TO MONGO');
-  });
-  connectToMongo();
-  let db = mongoose.connection;
+    });
+};
+connectToMongo();
+
+const db = mongoose.connection;
   //     console.log('connected to database');
   app.get('/products/list', (req, res) => {
     // get list of all products
