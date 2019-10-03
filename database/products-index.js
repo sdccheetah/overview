@@ -29,9 +29,7 @@ db.once('open', function() {
   let count = 0;
   let insert = 0;
   var lineReader = fs
-    .createReadStream(
-      'https://sdcfilescheetah.s3.us-east-2.amazonaws.com/product_list.csv'
-    )
+    .createReadStream('./data_files/product_list.csv')
     .pipe(csv())
     .on('data', data => {
       results.push({
@@ -44,7 +42,7 @@ db.once('open', function() {
         default_price: data[' default_price']
       });
       count++;
-      if (count === 10000) {
+      if (count === 100000) {
         product.insertMany(results);
         count = 0;
         results = [];

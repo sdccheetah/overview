@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 const connectToMongo = () => {
   let tries = 0;
   mongoose
-    .connect(`mongodb://mongo:27017/products`, {
+    .connect(`mongodb://localhost:27017/products`, {
       useNewUrlParser: true
     })
     .then(data => {
@@ -219,28 +219,7 @@ app.get('/products/:product_id/related', (req, res) => {
 //       description: 1,
 //       category: 1,
 //       default_price: 1
-//     })
-//     .toArray()
-//     .then(data => {
-//       results['results'] = data;
-//       res.send(results['results']);
-//     });
-// }); //TODO: chain together from features collection
-// //sample data:
-// //   {
-// //     "id": "3",
-// //     "name": "Morning Joggers",
-// //     "slogan": "Make yourself a morning person",
-// //     "description": "Whether you're a morning person or not.  Whether you're gym bound or not.  Everyone looks good in joggers.",
-// //     "category": "Pants",
-// //     "default_price": 40
-// // }
-
-// app.get('/products/:product_id/styles', (req, res) => {
-//   let style = Number(req.params.product_id);
-//   let results = {
-//     product_id: req.params.product_id,
-//     skus: []
+//  ASq 1`34: []
 //   };
 //   db.collection('styles')
 //     .find({ productId: style })
@@ -326,6 +305,5 @@ app.get('/products/:product_id/related', (req, res) => {
 // // ]
 
 app.listen(port, () => {
-  console.log('this is working, this is the port', port);
-  console.log(`WHY ARE YOU NOT WORKING ${port}!`);
+  console.log(`App listening on port ${port}!`);
 });
